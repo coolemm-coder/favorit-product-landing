@@ -120,12 +120,12 @@
         /* Видео-фон */
         .hero-video {
             position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            min-width: 100%; min-height: 100%;
-            width: auto; height: auto;
+            inset: 0;
+            
+            width: 100%; height: 100%;
+            
             object-fit: cover;
-            opacity: 0.55;
+            opacity: 0.6;
             z-index: 0;
         }
         /* Fallback фото (пока видео грузится / мобильные) */
@@ -270,7 +270,7 @@
         }
         .marquee-item svg {
             width: 72px; height: 40px; flex-shrink: 0;
-            opacity: 0.55;
+            opacity: 0.6;
             transition: opacity 0.3s;
         }
         .marquee:hover .marquee-item svg { opacity: 0.85; }
@@ -686,8 +686,8 @@
 
 <!-- HERO -->
 <section class="hero">
-    <video class="hero-video" autoplay muted loop playsinline>
-        <source src="https://cdn.jsdelivr.net/gh/coolemm-coder/favorit-product-landing@main/hero-video.mp4" type="video/mp4">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto">
+        <source src="hero-video.mp4" type="video/mp4">
     </video>
     <div class="hero-bg"></div>
     <div class="hero-content">
