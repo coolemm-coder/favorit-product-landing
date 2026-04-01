@@ -117,20 +117,38 @@
             position: relative;
             overflow: hidden;
         }
-        /* Фоновое фото филе */
+        /* Видео-фон */
+        .hero-video {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            object-fit: cover;
+            opacity: 0.55;
+            z-index: 0;
+        }
+        /* Fallback фото (пока видео грузится / мобильные) */
         .hero-bg {
             position: absolute; inset: 0;
             background: url('https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=1920&q=80&auto=format') center/cover no-repeat;
-            opacity: 0.45;
+            opacity: 0.35;
+            z-index: 0;
+            transition: opacity 0.8s;
         }
-        /* Градиент поверх фото */
+        /* Градиент поверх видео */
         .hero::before {
             content: '';
             position: absolute; inset: 0;
             background:
-                linear-gradient(to right, rgba(17,32,74,0.85) 0%, rgba(17,32,74,0.5) 50%, rgba(17,32,74,0.2) 100%),
-                linear-gradient(to top, rgba(17,32,74,0.7) 0%, transparent 50%);
+                linear-gradient(to right, rgba(17,32,74,0.88) 0%, rgba(17,32,74,0.5) 50%, rgba(17,32,74,0.15) 100%),
+                linear-gradient(to top, rgba(17,32,74,0.75) 0%, transparent 50%);
             z-index: 1;
+        }
+        /* Мобильные: скрыть видео, показать фото */
+        @media (max-width: 768px) {
+            .hero-video { display: none; }
+            .hero-bg { opacity: 0.4 !important; }
         }
         /* Шум-текстура для натуральности */
         .hero::after {
@@ -139,10 +157,11 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
             opacity: 0.5;
             pointer-events: none;
+            z-index: 2;
         }
 
         .hero-content {
-            position: relative; z-index: 2;
+            position: relative; z-index: 3;
             max-width: 1200px; width: 100%;
         }
         .hero-eyebrow {
@@ -667,6 +686,9 @@
 
 <!-- HERO -->
 <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+        <source src="hero-video.mp4" type="video/mp4">
+    </video>
     <div class="hero-bg"></div>
     <div class="hero-content">
         <div class="hero-eyebrow">Производитель · Смоленск · с 2009</div>
@@ -1338,6 +1360,15 @@ document.getElementById('lead-form').addEventListener('submit', function(e) {
     btn.style.background = '#1a6b3a';
     btn.disabled = true;
 });
+
+// Hero video: hide fallback photo when video loads
+var heroVideo = document.querySelector('.hero-video');
+if (heroVideo) {
+    heroVideo.addEventListener('loadeddata', function() {
+        var bg = document.querySelector('.hero-bg');
+        if (bg) bg.style.opacity = '0';
+    });
+}
 </script>
 
 </body>
