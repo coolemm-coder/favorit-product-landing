@@ -1,0 +1,35 @@
+.vercel
+.DS_Store
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build artifacts
+outputs/
+presentation/node_modules/
+presentation/package-lock.json
+
+# Старые / неиспользуемые исходники
+favorit-hero-1.png
+favorit-hero-2.png
+favorit-hero-3.png
+favorit-hero-4.png
+hero-brand-reveal.html
+hero-preview.html
+download_photos.sh
+
+# Сырые тяжёлые PNG (используются только сжатые WebP версии)
+assets/hero/*.png
+!assets/hero/hero-poster.png
+
+# Excel клиента (не публичный)
+Володя.xlsx
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
