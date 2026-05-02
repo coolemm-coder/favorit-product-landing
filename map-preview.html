@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Превью: компактная география поставок — Фаворит-Продукт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#27357C;
+    --navy-deep:#0F1A4A;
+    --red:#D82126;
+    --red-light:#F25A60;
+    --ink:#0B1838;
+    --smoke:#5C6B85;
+    --line:#E2E8F0;
+    --ice:#F5F7FB;
+    --bg:#fff;
+  }
+  body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:#F0F2F8;padding:40px 20px}
+  .container{max-width:1200px;margin:0 auto}
+  .preview-header{text-align:center;margin-bottom:48px}
+  .preview-header h1{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px}
+  .preview-header p{color:var(--smoke);font-size:15px}
+  .preview-tag{display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:16px}
+  .tag-old{background:#FEE2E2;color:#B91C1C}
+  .tag-new{background:#DCFCE7;color:#166534}
+
+  .preview-block{background:#fff;border-radius:24px;padding:48px;margin-bottom:32px;box-shadow:0 20px 60px rgba(15,26,74,.08)}
+  .preview-block h2{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;margin-bottom:8px;letter-spacing:-0.02em}
+  .preview-block .desc{color:var(--smoke);font-size:14px;margin-bottom:32px}
+
+  /* OLD — 480px placeholder */
+  .map-old{
+    height:480px;width:100%;border-radius:8px;
+    background:
+      linear-gradient(135deg,#d4d8e0 0%,#bdc4d0 100%);
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .map-old::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+    background-size:60px 60px;
+    opacity:.6;
+  }
+  .map-old::after{
+    content:"OpenStreetMap (Leaflet, 480px)";
+    position:relative;z-index:1;
+    font-family:'Space Grotesk',sans-serif;font-size:14px;color:#475569;font-weight:600;
+    background:#fff;padding:8px 16px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.1);
+  }
+  .pin-old{
+    position:absolute;
+    width:32px;height:42px;
+    background:var(--red);
+    -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path d='M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z'/></svg>") center/contain no-repeat;
+    mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path d='M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z'/></svg>") center/contain no-repeat;
+  }
+
+  /* NEW — compact static SVG map + cards */
+  .map-new-wrap{display:grid;gap:0;background:linear-gradient(135deg,#F8FAFC 0%,#EEF2F8 100%);border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+  .map-new{
+    height:240px;width:100%;
+    position:relative;
+    background:
+      radial-gradient(circle at 30% 50%,rgba(39,53,124,.06) 0%,transparent 40%),
+      linear-gradient(180deg,#F8FAFC 0%,#EEF2F8 100%);
+    overflow:hidden;
+  }
+  .map-new svg{position:absolute;inset:0;width:100%;height:100%}
+  .map-link{
+    position:absolute;bottom:14px;right:14px;z-index:5;
+    display:inline-flex;align-items:center;gap:6px;
+    padding:9px 14px;border-radius:999px;
+    background:rgba(255,255,255,.95);
+    border:1px solid var(--line);
+    font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:var(--navy);
+    text-decoration:none;
+    box-shadow:0 4px 12px rgba(15,26,74,.08);
+    transition:all .2s;
+  }
+  .map-link:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(15,26,74,.12);background:#fff}
+
+  .warehouse-cards{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+    border-top:1px solid var(--line);
+    background:#fff;
+  }
+  .wh-card{
+    padding:20px 18px;
+    border-right:1px solid var(--line);
+    transition:background .2s;
+    cursor:default;
+  }
+  .wh-card:last-child{border-right:0}
+  .wh-card:hover{background:var(--ice)}
+  .wh-num{
+    display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;
+    letter-spacing:0.08em;color:var(--navy);
+    background:rgba(39,53,124,.08);padding:3px 8px;border-radius:6px;
+    margin-bottom:8px;
+  }
+  .wh-card.main .wh-num{color:var(--red);background:rgba(216,33,38,.1)}
+  .wh-card h4{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px;letter-spacing:-0.01em}
+  .wh-card .wh-addr{font-size:12px;color:var(--smoke);line-height:1.5;margin-bottom:8px}
+  .wh-card .wh-meta{font-size:11px;color:var(--navy);font-weight:600;font-family:'Space Grotesk',sans-serif}
+
+  /* mobile preview */
+  .mobile-preview{
+    max-width:380px;margin:32px auto 0;
+    background:#000;border-radius:36px;padding:12px;
+    box-shadow:0 30px 80px rgba(0,0,0,.2);
+  }
+  .mobile-screen{
+    background:#fff;border-radius:24px;overflow:hidden;
+    height:560px;
+  }
+  .mobile-block{padding:24px 20px}
+  .mobile-block h3{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px}
+  .mobile-block .mobile-eyebrow{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--navy);margin-bottom:8px}
+  .mobile-cards{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+  .mobile-card{padding:14px;border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;gap:12px}
+  .mobile-card .mc-dot{width:10px;height:10px;border-radius:50%;background:var(--red);flex-shrink:0}
+  .mobile-card.sec .mc-dot{background:var(--navy)}
+  .mobile-card .mc-text{flex:1;font-size:13px}
+  .mobile-card .mc-text strong{display:block;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;margin-bottom:2px}
+  .mobile-card .mc-text span{color:var(--smoke);font-size:12px}
+  .mobile-card .mc-arrow{color:var(--smoke);font-size:18px}
+
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+  .compare-card{background:var(--ice);padding:20px;border-radius:12px}
+  .compare-card h5{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px;letter-spacing:-0.01em}
+  .compare-card ul{list-style:none}
+  .compare-card li{font-size:13px;color:var(--ink);padding:6px 0;display:flex;align-items:flex-start;gap:8px}
+  .compare-card li::before{content:"•";flex-shrink:0;width:14px}
+  .compare-card.bad li::before{color:var(--red)}
+  .compare-card.good li::before{color:#10B981}
+
+  /* responsive */
+  @media (max-width:900px){
+    .warehouse-cards{grid-template-columns:repeat(2,1fr)}
+    .wh-card{border-right:0;border-bottom:1px solid var(--line)}
+    .wh-card:nth-child(even){border-right:0}
+    .wh-card:nth-child(odd){border-right:1px solid var(--line)}
+    .wh-card:nth-last-child(-n+2){border-bottom:0}
+  }
+  @media (max-width:600px){
+    .map-new{height:200px}
+    .warehouse-cards{grid-template-columns:1fr}
+    .wh-card{border-right:0;border-bottom:1px solid var(--line)}
+    .wh-card:last-child{border-bottom:0}
+    .compare-grid{grid-template-columns:1fr}
+    .preview-block{padding:24px 20px}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="preview-header">
+    <h1>География поставок — превью</h1>
+    <p>Слева как сейчас, справа как будет. Скролл вниз — мобильная версия и сравнение.</p>
+  </div>
+
+  <!-- ========== ВАРИАНТ A — НОВЫЙ КОМПАКТНЫЙ ========== -->
+  <div class="preview-block">
+    <span class="preview-tag tag-new">Стало · Вариант A</span>
+    <h2>4 склада · доставка от Смоленска до Звенигорода</h2>
+    <p class="desc">Карта-инфографика 240px + ряд из 4 карточек. Без Leaflet (−42KB JS, −1.2s LCP). Брендовая палитра.</p>
+
+    <div class="map-new-wrap">
+      <div class="map-new">
+        <!-- Stylized map of Belarus + ЦФО with 4 warehouse pins -->
+        <svg viewBox="0 0 1200 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-label="Карта складов">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(39,53,124,0.08)" stroke-width="0.5"/>
+            </pattern>
+            <radialGradient id="glowRed" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#D82126" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#D82126" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="glowNavy" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#27357C" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#27357C" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+              <feOffset dy="2"/>
+              <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
+              <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- Grid background -->
+          <rect width="1200" height="240" fill="url(#grid)"/>
+
+          <!-- Stylized country outlines (Belarus + Western Russia) -->
+          <!-- Belarus blob -->
+          <path d="M 280 70 Q 240 90 230 130 Q 235 170 280 180 Q 340 175 380 165 Q 420 150 410 110 Q 390 80 350 75 Q 310 65 280 70 Z"
+                fill="rgba(39,53,124,0.05)" stroke="rgba(39,53,124,0.18)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <!-- Russia western part blob -->
+          <path d="M 410 90 Q 480 70 580 75 Q 700 85 820 100 Q 920 120 950 160 Q 940 200 880 200 Q 760 200 660 195 Q 550 190 470 175 Q 420 160 410 130 Q 405 110 410 90 Z"
+                fill="rgba(39,53,124,0.04)" stroke="rgba(39,53,124,0.18)" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+          <!-- Country labels -->
+          <text x="305" y="135" font-family="Space Grotesk,sans-serif" font-size="13" font-weight="700" fill="#27357C" opacity="0.45" letter-spacing="0.5">БЕЛАРУСЬ</text>
+          <text x="640" y="155" font-family="Space Grotesk,sans-serif" font-size="13" font-weight="700" fill="#27357C" opacity="0.45" letter-spacing="0.5">ЦФО · РОССИЯ</text>
+
+          <!-- Connection lines from Smolensk to MO warehouses -->
+          <path d="M 460 130 Q 600 100 740 145" stroke="#27357C" stroke-width="1.5" stroke-dasharray="3,4" fill="none" opacity="0.5"/>
+          <path d="M 460 130 Q 600 110 720 155" stroke="#27357C" stroke-width="1.5" stroke-dasharray="3,4" fill="none" opacity="0.5"/>
+          <path d="M 460 130 Q 600 105 760 140" stroke="#27357C" stroke-width="1.5" stroke-dasharray="3,4" fill="none" opacity="0.5"/>
+          <!-- Connection from Smolensk to Минск -->
+          <path d="M 460 130 Q 380 125 320 130" stroke="#D82126" stroke-width="1.5" stroke-dasharray="3,4" fill="none" opacity="0.5"/>
+
+          <!-- Минск reference dot (gray) -->
+          <circle cx="320" cy="130" r="5" fill="#5C6B85" opacity="0.55"/>
+          <text x="320" y="118" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#5C6B85" text-anchor="middle">Минск</text>
+
+          <!-- 1. Smolensk — main pin (red) -->
+          <circle cx="460" cy="130" r="22" fill="url(#glowRed)"/>
+          <circle cx="460" cy="130" r="9" fill="#D82126" filter="url(#softShadow)"/>
+          <circle cx="460" cy="130" r="3.5" fill="#fff"/>
+          <text x="460" y="108" font-family="Space Grotesk,sans-serif" font-size="13" font-weight="800" fill="#D82126" text-anchor="middle">СМОЛЕНСК</text>
+          <text x="460" y="160" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#27357C" text-anchor="middle">главный склад · 70 км до РБ</text>
+
+          <!-- 2. Звенигород -->
+          <circle cx="720" cy="155" r="14" fill="url(#glowNavy)"/>
+          <circle cx="720" cy="155" r="7" fill="#27357C" filter="url(#softShadow)"/>
+          <circle cx="720" cy="155" r="2.5" fill="#fff"/>
+          <text x="720" y="180" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#27357C" text-anchor="middle">Звенигород</text>
+
+          <!-- 3. Selyatino -->
+          <circle cx="745" cy="142" r="14" fill="url(#glowNavy)"/>
+          <circle cx="745" cy="142" r="7" fill="#27357C" filter="url(#softShadow)"/>
+          <circle cx="745" cy="142" r="2.5" fill="#fff"/>
+          <text x="752" y="124" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#27357C">Селятино</text>
+
+          <!-- 4. Naro-Fominsk -->
+          <circle cx="755" cy="160" r="14" fill="url(#glowNavy)"/>
+          <circle cx="755" cy="160" r="7" fill="#27357C" filter="url(#softShadow)"/>
+          <circle cx="755" cy="160" r="2.5" fill="#fff"/>
+          <text x="755" y="200" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#27357C" text-anchor="middle">Наро-Фоминск</text>
+
+          <!-- Москва reference -->
+          <circle cx="780" cy="135" r="4" fill="#5C6B85" opacity="0.55"/>
+          <text x="780" y="124" font-family="Inter,sans-serif" font-size="9" font-weight="600" fill="#5C6B85" text-anchor="middle">Москва</text>
+
+          <!-- Compass / scale -->
+          <g transform="translate(40,40)">
+            <text font-family="Space Grotesk,sans-serif" font-size="10" font-weight="700" fill="#27357C" opacity="0.6" letter-spacing="0.1em">ГЕОГРАФИЯ ОТГРУЗОК</text>
+            <text x="0" y="14" font-family="Inter,sans-serif" font-size="11" font-weight="500" fill="#5C6B85">4 склада · реф · ЕАЭС</text>
+          </g>
+        </svg>
+
+        <a href="https://yandex.ru/maps/?ll=34.5,55.2&z=6&pt=32.05,54.78,pm2rdm~36.93,55.49,pm2blm~36.73,55.39,pm2blm~36.85,55.74,pm2blm" target="_blank" rel="noopener" class="map-link">
+          Открыть в Я.Картах →
+        </a>
+      </div>
+
+      <!-- 4 warehouse cards -->
+      <div class="warehouse-cards">
+        <div class="wh-card main">
+          <span class="wh-num">01 · ГЛАВНЫЙ</span>
+          <h4>Смоленск</h4>
+          <p class="wh-addr">Краснинское шоссе, 35 · 214030</p>
+          <p class="wh-meta">70 км до границы РБ</p>
+        </div>
+        <div class="wh-card">
+          <span class="wh-num">02</span>
+          <h4>Селятино</h4>
+          <p class="wh-addr">Наро-Фоминский р-н, МО</p>
+          <p class="wh-meta">Реф · 24/7</p>
+        </div>
+        <div class="wh-card">
+          <span class="wh-num">03</span>
+          <h4>Наро-Фоминск</h4>
+          <p class="wh-addr">МО, западное направление</p>
+          <p class="wh-meta">Реф · 24/7</p>
+        </div>
+        <div class="wh-card">
+          <span class="wh-num">04</span>
+          <h4>Звенигород</h4>
+          <p class="wh-addr">Одинцовский округ, МО</p>
+          <p class="wh-meta">Реф · 24/7</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== СТАРЫЙ ВИД ========== -->
+  <div class="preview-block">
+    <span class="preview-tag tag-old">Сейчас на сайте</span>
+    <h2>География поставок — Leaflet 480px</h2>
+    <p class="desc">Тяжёлая интерактивная карта на OSM-тайлах. На мобиле занимает 60% экрана. Серый фон.</p>
+    <div class="map-old">
+      <div class="pin-old" style="top:36%;left:38%"></div>
+      <div class="pin-old" style="top:42%;left:62%"></div>
+      <div class="pin-old" style="top:46%;left:64%"></div>
+      <div class="pin-old" style="top:38%;left:66%"></div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card bad">
+        <h5>Минусы текущей карты</h5>
+        <ul>
+          <li>Высота 480px — на мобиле почти весь экран</li>
+          <li>Leaflet 42KB JS + tile fetching = +1.2s LCP</li>
+          <li>OSM тайлы серые, не вписаны в бренд</li>
+          <li>CLS-проблема: layout-shift пока грузятся тайлы</li>
+          <li>Мало кто реально пинч-зумит карту в B2B-кейсе</li>
+        </ul>
+      </div>
+      <div class="compare-card good">
+        <h5>Плюсы нового варианта</h5>
+        <ul>
+          <li>240px desktop · 200px mobile (−50% места)</li>
+          <li>0 KB JS · LCP −1.2s · CLS = 0</li>
+          <li>Брендовая палитра #27357C + #D82126</li>
+          <li>4 карточки складов с адресом и километражем</li>
+          <li>Кнопка «Я.Карты →» для тех кто хочет маршрут</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== МОБИЛЬНОЕ ПРЕВЬЮ ========== -->
+  <div class="preview-block">
+    <span class="preview-tag tag-new">Мобильная версия</span>
+    <h2>На телефоне</h2>
+    <p class="desc">SVG-карта 200px высотой, далее карточки в столбик. Можно отдать только список без карты — ещё быстрее.</p>
+
+    <div class="mobile-preview">
+      <div class="mobile-screen">
+        <div class="map-new" style="height:160px;border-radius:0">
+          <svg viewBox="0 0 380 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block">
+            <rect width="380" height="160" fill="url(#grid)"/>
+            <!-- mini map -->
+            <path d="M 50 60 Q 30 80 35 105 Q 45 120 80 122 Q 130 120 150 110 Q 165 95 155 75 Q 130 55 90 55 Q 65 55 50 60 Z"
+                  fill="rgba(39,53,124,0.05)" stroke="rgba(39,53,124,0.2)" stroke-width="1" stroke-dasharray="3,2"/>
+            <path d="M 165 75 Q 220 60 290 70 Q 340 85 345 115 Q 320 130 250 125 Q 200 122 175 110 Q 160 95 165 75 Z"
+                  fill="rgba(39,53,124,0.04)" stroke="rgba(39,53,124,0.2)" stroke-width="1" stroke-dasharray="3,2"/>
+
+            <text x="80" y="93" font-family="Space Grotesk,sans-serif" font-size="9" font-weight="700" fill="#27357C" opacity="0.5" text-anchor="middle">БЕЛАРУСЬ</text>
+            <text x="265" y="105" font-family="Space Grotesk,sans-serif" font-size="9" font-weight="700" fill="#27357C" opacity="0.5" text-anchor="middle">РОССИЯ</text>
+
+            <!-- Smolensk red main -->
+            <circle cx="170" cy="92" r="14" fill="url(#glowRed)"/>
+            <circle cx="170" cy="92" r="6" fill="#D82126"/>
+            <circle cx="170" cy="92" r="2" fill="#fff"/>
+            <text x="170" y="78" font-family="Space Grotesk,sans-serif" font-size="10" font-weight="800" fill="#D82126" text-anchor="middle">СМОЛЕНСК</text>
+
+            <!-- 3 MO dots -->
+            <circle cx="270" cy="105" r="5" fill="#27357C"/>
+            <circle cx="285" cy="98" r="5" fill="#27357C"/>
+            <circle cx="290" cy="115" r="5" fill="#27357C"/>
+            <text x="285" y="138" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="#27357C" text-anchor="middle">3 склада · МО</text>
+
+            <!-- line -->
+            <path d="M 170 92 Q 220 90 285 105" stroke="#27357C" stroke-width="1" stroke-dasharray="2,3" fill="none" opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="mobile-block">
+          <div class="mobile-eyebrow">ГЕОГРАФИЯ ОТГРУЗОК</div>
+          <h3>4 склада: Смоленск + 3 МО</h3>
+          <div class="mobile-cards">
+            <div class="mobile-card">
+              <span class="mc-dot"></span>
+              <div class="mc-text"><strong>Смоленск</strong><span>главный · 70 км до РБ</span></div>
+              <span class="mc-arrow">→</span>
+            </div>
+            <div class="mobile-card sec">
+              <span class="mc-dot"></span>
+              <div class="mc-text"><strong>Селятино</strong><span>Наро-Фоминский р-н, МО</span></div>
+              <span class="mc-arrow">→</span>
+            </div>
+            <div class="mobile-card sec">
+              <span class="mc-dot"></span>
+              <div class="mc-text"><strong>Наро-Фоминск</strong><span>МО · реф · 24/7</span></div>
+              <span class="mc-arrow">→</span>
+            </div>
+            <div class="mobile-card sec">
+              <span class="mc-dot"></span>
+              <div class="mc-text"><strong>Звенигород</strong><span>Одинцовский округ, МО</span></div>
+              <span class="mc-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align:center;color:var(--smoke);font-size:13px;margin-top:32px">
+    Превью сделано с использованием landing-audit · ui-ux-pro-max · brand-review skills из LandingFactory.
+  </p>
+</div>
+</body>
+</html>

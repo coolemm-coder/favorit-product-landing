@@ -33,3 +33,9 @@ assets/hero/*.png
 # Logs
 *.log
 npm-debug.log*
+
+# Screenshots (внутренние превью, не для продакшна)
+screenshots/
+
+# Codex draft preview (не используется на сайте)
+design-preview.html
